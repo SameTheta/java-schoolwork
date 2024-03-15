@@ -17,9 +17,6 @@ public class SortStudents {
             System.out.println("Enter that student's grade");
             grades[i] = input.nextDouble(); // get that student's grade
         }
-        
-        double tempGrade;
-        String tempName;
 
         // sorting algorithm    
         for (int i = 0; i < numStudents - 1; i++) {
@@ -43,10 +40,11 @@ public class SortStudents {
                 grades[curMinIdx] = grades[i];
                 names[curMinIdx] = names[i];
                 grades[i] = curMin;
+                names[i] = curName;
             }
         }
 
-        for (int i = 0; i < numStudents; i++) {
+        for (int i = numStudents - 1; i >= 0; i--) {
             System.out.printf("%s %.1f\n", names[i], grades[i]); // print out the grades
         }
     }
