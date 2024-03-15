@@ -1,6 +1,5 @@
 public class CouponCollectorsProblem {
     public static void main(String[] args) {
-        //huh@H!??!
         final int NUMBER_OF_CARDS = 52;
         String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
         String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10",
