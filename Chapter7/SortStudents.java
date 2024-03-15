@@ -18,6 +18,8 @@ public class SortStudents {
             grades[i] = input.nextDouble(); // get that student's grade
         }
 
+        input.close();
+
         // sorting algorithm    
         for (int i = 0; i < numStudents - 1; i++) {
             // sets current min to current index and index value
