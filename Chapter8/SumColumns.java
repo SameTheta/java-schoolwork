@@ -23,6 +23,8 @@ public class SumColumns {
             }
         }
 
+        input.close();
+
         for (int i = 0; i < inputMatrix[0].length; i++) {
             System.out.println("Sum of elements at column " + i + " is " + sumColumn(inputMatrix, i));
         }
