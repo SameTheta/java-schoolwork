@@ -29,6 +29,8 @@ public class MarkovMatrix {
             }
         }
 
+        input.close();
+
         System.out.println("This matrix is a " + isMarkovMatrix(inputMatrix) + " Markov matrix");
     }
 }
