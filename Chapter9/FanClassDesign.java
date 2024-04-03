@@ -3,7 +3,7 @@ public class FanClassDesign {
         Fan myFan = new Fan();
         
         myFan.setPower(true);
-        myFan.setSpeed(2);
+        myFan.setSpeed(myFan.MEDIUM);
 
         System.out.print(myFan.toString());
     }
