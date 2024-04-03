@@ -29,48 +29,48 @@ class Account {
     }
 
     // setter methods
-    void setID(int newID) {
+    public void setID(int newID) {
         id = newID;
     }
 
-    void setBalance(double newBalance) {
+    public void setBalance(double newBalance) {
         balance = newBalance;
     }
 
-    void setAIR(double newAIR) {
+    public void setAIR(double newAIR) {
         annualInterestRate = newAIR / 100;
     }
 
     // getter methods
-    int getID() {
+    public int getID() {
         return id;
     }
 
-    double getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    double getAIR() {
+    public double getAIR() {
         return annualInterestRate;
     }
 
-    Date getDate() {
+    public Date getDate() {
         return dateCreated;
     }
 
-    double getMonthlyInterestRate() {
+    public double getMonthlyInterestRate() {
         return annualInterestRate / 12;
     }
 
-    double getMonthlyInterest() {
+    public double getMonthlyInterest() {
         return balance * (annualInterestRate / 12);
     }
 
-    void withdraw(double withdrawlAmount) {
+    public void withdraw(double withdrawlAmount) {
         balance -= withdrawlAmount;
     }
 
-    void deposit(double depositAmount) {
+    public void deposit(double depositAmount) {
         balance += depositAmount;
     }
 }

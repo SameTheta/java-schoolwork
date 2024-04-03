@@ -18,7 +18,7 @@ class Fan {
     private boolean on = false;
 
     private double radius = 5;
-    String color = "blue";
+    private String color = "blue";
 
     Fan() { // creates a default fan
     }
