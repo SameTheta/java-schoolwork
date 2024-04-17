@@ -2,6 +2,7 @@ package FINAL_PROJECT;
 import java.util.*;
 public class ConnectFour {
     public static char[][] initializeBoard(char[][] board) {
+        // initializes the array of spaces on the board
         char[][] initialized_board = board;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -12,15 +13,26 @@ public class ConnectFour {
         return initialized_board;
     }
     
-    public static int getColumnNumFromPlayer(Scanner input) {
-        System.out.print("Where would you like to drop your disk? (Enter a num 1-6) ");
+    public static int getColumnNumFromPlayer(Scanner input, int turn) {
+        switch (turn % 2) {
+            case 1:
+                System.out.print("It's Red's turn! Where would you like to drop your disk? (Enter a num 1-6) ");
+                break;
+            case 0:
+                System.out.print("It's Yellow's turn! Where would you like to drop your disk? (Enter a num 1-6) ");
+                break;
+            default:
+                break;
+        }
+        
         int inputColumn = input.nextInt();
         return inputColumn - 1;
     }
 
     public static char[][] dropDisk(int color, int columnNo, char[][] board) {
+        // updates each disks position every turn
         for (int i = 5; i >= 0; i--) {
-            if (color % 2 == 0) {
+            if (color % 2 == 1) {
                 if (board[i][columnNo] == ' ') {
                     board[i][columnNo] = 'R';
                     break;
@@ -37,6 +49,7 @@ public class ConnectFour {
     }
 
     public static void displayBoard(char[][] board) {
+        // displays the current board
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 System.out.print("|" + board[i][j]);
@@ -46,16 +59,36 @@ public class ConnectFour {
     }
 
     public static int checkGameStatus(char[][] board) {
-        /* 0 = game still going
+        // checks whether or not someone's win condition has been met, if not, continue game
+        /* 0 = Game continues
          * 1 = Red wins
          * 2 = Yellow wins
          * 3 = Game tied
          */
 
-        checkRows(board);
-        checkColumns(board);
-        checkDiagonals(board);
-        
+        switch (checkRows(board)) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+        }
+
+        switch (checkColumns(board)) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+        }
+
+        switch (checkDiagonals(board)) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            default:
+                break;
+        }
+
         if (isBoardFull(board)) {
             return 3;
         }
@@ -68,9 +101,31 @@ public class ConnectFour {
         int red_win = 1;
         int yellow_win = 2;
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+        int redCount = 0;
+        int yellowCount = 0;
 
+        //row logic
+        for (int i = 0; i < board.length; i++) {
+            redCount = 0;
+            yellowCount = 0;
+            for (int j = 0; j < board[i].length; j++) {
+                //switch case instead of if else ftw
+                switch (board[i][j]) {
+                    case 'R':
+                        redCount++;
+                        yellowCount = 0;
+                        break;
+                    case 'Y' :
+                        yellowCount++;
+                        redCount = 0;
+                        break;
+                }
+
+                if (redCount == 4) {
+                    return red_win;
+                } else if (yellowCount == 4) {
+                    return yellow_win;
+                }
             }
         }
 
@@ -83,6 +138,33 @@ public class ConnectFour {
         int red_win = 1;
         int yellow_win = 2;
 
+        int redCount = 0;
+        int yellowCount = 0;
+
+        // main column logic (basically the same as row logic except the indexes are reversed)
+        for (int i = 0; i < board.length; i++) {
+            redCount = 0;
+            yellowCount = 0;
+            for (int j = 0; j < board[i].length; j++) {
+                switch (board[j][i]) {
+                    case 'R':
+                        redCount++;
+                        yellowCount = 0;
+                        break;
+                    case 'Y' :
+                        yellowCount++;
+                        redCount = 0;
+                        break;
+                }
+
+                if (redCount == 4) {
+                    return red_win;
+                } else if (yellowCount == 4) {
+                    return yellow_win;
+                }
+            }
+        }
+
         return game_continue;
     }
 
@@ -91,6 +173,31 @@ public class ConnectFour {
         int game_continue = 0;
         int red_win = 1;
         int yellow_win = 2;
+
+        int redCount = 0;
+        int yellowCount = 0;
+
+        for (int i = 0; i < board.length - 1; i++) {
+            redCount = 0;
+            yellowCount = 0;
+            for (int j = 0; j < board[i].length - 1; j++) {
+                System.out.print(board[i][j] + " " + board[i+1][j+1] + " ");
+                if (board[i][j] == 'R' && board[i+1][j+1] == 'R') {
+                    redCount++;
+                    System.out.println(redCount);
+                    yellowCount = 0;
+                } else if (board[i][j] == 'R' && board[i+1][j+1] == 'R') {
+                    redCount++;
+                    yellowCount = 0;
+                }
+
+                if (redCount == 4) {
+                    return red_win;
+                } else if (yellowCount == 4) {
+                    return yellow_win;
+                }
+            }
+        }
 
         return game_continue;
     }
@@ -126,16 +233,29 @@ public class ConnectFour {
 
         do {
             displayBoard(main_board);
-            main_board = dropDisk(turn, getColumnNumFromPlayer(input), main_board);
+            main_board = dropDisk(turn, getColumnNumFromPlayer(input, turn), main_board);
             turn++;
 
         } while (checkGameStatus(main_board) == 0);
 
-        System.out.println("Final play!");
+        System.out.println("Final play! (Game took " + turn + " turns)");
         displayBoard(main_board);
 
-        if (checkGameStatus(main_board) == 3) {
-            System.out.println("It's a tie!");
+        switch (checkGameStatus(main_board)) {
+            case 1:
+                System.out.println("Red wins!");
+                break;
+
+            case 2:
+                System.out.println("Yellow wins!");
+                break;
+
+            case 3:
+                System.out.println("It's a tie!");
+                break;
+        
+            default:
+                break;
         }
     }
 }
