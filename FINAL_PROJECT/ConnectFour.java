@@ -1,5 +1,5 @@
-package FINAL_PROJECT;
 import java.util.*;
+
 public class ConnectFour {
     public static char[][] initializeBoard(char[][] board) {
         // initializes the array of spaces on the board
