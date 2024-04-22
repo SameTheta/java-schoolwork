@@ -5,33 +5,37 @@ public class ConnectFour {
         // initializes the array of spaces on the board
         char[][] initialized_board = board;
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
+            for (int j = 0; j < board[i].length; j++) {
                 initialized_board[i][j] = ' ';
             }
         }
-
         return initialized_board;
     }
     
     public static int getColumnNumFromPlayer(Scanner input, int turn) {
-        switch (turn % 2) {
-            case 1:
-                System.out.print("It's Red's turn! Where would you like to drop your disk? (Enter a num 1-6) ");
-                break;
-            case 0:
-                System.out.print("It's Yellow's turn! Where would you like to drop your disk? (Enter a num 1-6) ");
-                break;
-            default:
-                break;
+        int inputColumn = 0;
+
+        while (inputColumn > 7 || inputColumn < 1) {
+            switch (turn % 2) {
+                case 1:
+                    System.out.print("It's Red's turn! Where would you like to drop your disk? (Enter a num 1-7) ");
+                    break;
+                case 0:
+                    System.out.print("It's Yellow's turn! Where would you like to drop your disk? (Enter a num 1-7) ");
+                    break;
+                default:
+                    break;
+            }
+
+            inputColumn = input.nextInt();
         }
         
-        int inputColumn = input.nextInt();
         return inputColumn - 1;
     }
 
     public static char[][] dropDisk(int color, int columnNo, char[][] board) {
         // updates each disks position every turn
-        for (int i = 5; i >= 0; i--) {
+        for (int i = (board.length - 1); i >= 0; i--) {
             if (color % 2 == 1) {
                 if (board[i][columnNo] == ' ') {
                     board[i][columnNo] = 'R';
@@ -119,11 +123,15 @@ public class ConnectFour {
                         yellowCount++;
                         redCount = 0;
                         break;
+                    default:
+                        redCount = 0;
+                        yellowCount = 0;
+                        break;
                 }
 
-                if (redCount == 4) {
+                if (redCount >= 4) {
                     return red_win;
-                } else if (yellowCount == 4) {
+                } else if (yellowCount >= 4) {
                     return yellow_win;
                 }
             }
@@ -145,7 +153,7 @@ public class ConnectFour {
         for (int i = 0; i < board.length; i++) {
             redCount = 0;
             yellowCount = 0;
-            for (int j = 0; j < board[i].length; j++) {
+            for (int j = 0; j < board[i].length-1; j++) {
                 switch (board[j][i]) {
                     case 'R':
                         redCount++;
@@ -157,9 +165,9 @@ public class ConnectFour {
                         break;
                 }
 
-                if (redCount == 4) {
+                if (redCount >= 4) {
                     return red_win;
-                } else if (yellowCount == 4) {
+                } else if (yellowCount >= 4) {
                     return yellow_win;
                 }
             }
@@ -168,7 +176,7 @@ public class ConnectFour {
         return game_continue;
     }
 
-    public static int checkDiagonals(char[][] board) {
+    /* public static int checkDiagonals(char[][] board) {
         // winning vars
         int game_continue = 0;
         int red_win = 1;
@@ -181,10 +189,10 @@ public class ConnectFour {
             redCount = 0;
             yellowCount = 0;
             for (int j = 0; j < board[i].length - 1; j++) {
-                System.out.print(board[i][j] + " " + board[i+1][j+1] + " ");
+                //System.out.print(board[i][j] + " " + board[i+1][j+1] + " ");
                 if (board[i][j] == 'R' && board[i+1][j+1] == 'R') {
                     redCount++;
-                    System.out.println(redCount);
+                    //System.out.println(redCount);
                     yellowCount = 0;
                 } else if (board[i][j] == 'R' && board[i+1][j+1] == 'R') {
                     redCount++;
@@ -199,6 +207,76 @@ public class ConnectFour {
             }
         }
 
+        return game_continue;
+    } */
+
+    public static int checkDiagonals(char[][] board) {
+        // winning vars
+        int game_continue = 0;
+        int red_win = 1;
+        int yellow_win = 2;
+    
+        int redCount = 0;
+        int yellowCount = 0;
+    
+        // check diagonals forward
+        for (int i = 0; i < board.length - 3; i++) {
+            for (int j = 0; j < board[i].length - 3; j++) {
+                redCount = 0;
+                yellowCount = 0;
+                for (int k = 0; k < 4; k++) {
+                    switch (board[i + k][j + k]) {
+                        case 'R':
+                            redCount++;
+                            yellowCount = 0;
+                            break;
+                        case 'Y':
+                            yellowCount++;
+                            redCount = 0;
+                            break;
+                        default:
+                            redCount = 0;
+                            yellowCount = 0;
+                            break;
+                    }
+                }
+                if (redCount >= 4) {
+                    return red_win;
+                } else if (yellowCount >= 4) {
+                    return yellow_win;
+                }
+            }
+        }
+    
+        // check diagonal backward
+        for (int i = 0; i < board.length - 3; i++) {
+            for (int j = 3; j < board[i].length; j++) {
+                redCount = 0;
+                yellowCount = 0;
+                for (int k = 0; k < 4; k++) {
+                    switch (board[i + k][j - k]) {
+                        case 'R':
+                            redCount++;
+                            yellowCount = 0;
+                            break;
+                        case 'Y':
+                            yellowCount++;
+                            redCount = 0;
+                            break;
+                        default:
+                            redCount = 0;
+                            yellowCount = 0;
+                            break;
+                    }
+                }
+                if (redCount >= 4) {
+                    return red_win;
+                } else if (yellowCount >= 4) {
+                    return yellow_win;
+                }
+            }
+        }
+    
         return game_continue;
     }
 
@@ -226,7 +304,7 @@ public class ConnectFour {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        char[][] main_board = new char[6][6];
+        char[][] main_board = new char[6][7];
 
         main_board = initializeBoard(main_board);
         int turn = 1;
